@@ -23,8 +23,29 @@ namespace LabSDES.Controllers
         [HttpPost]
         public ActionResult CargaParaCifrar(HttpPostedFileBase ACifrar, string Clave)
         {
-            SDES NSDES = new SDES();
-
+            if(ACifrar != null)
+            {
+                if(Clave != null)
+                {
+                    var Llave = Convert.ToInt32(Clave);
+                    if (Llave < 1024)
+                    {
+                        SDES NSDES = new SDES();
+                        Clave = Convert.ToString(Llave, 2);
+                        NSDES.ObtenerKas(Clave);
+                    }
+                    else
+                    {
+                        ViewBag.Msg("La clave debe ser menor a 1024");
+                    }
+                }else
+                {
+                    ViewBag.Msg("No se ingreso ninguna clave");
+                }
+            }else
+            {
+                ViewBag.Msg("No se selecciono ningun archivo");
+            }
             return View();
         }
 
